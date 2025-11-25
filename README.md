@@ -119,6 +119,10 @@ If **rep+ saved you time** during testing, development, or bug bounty work, plea
   <a href="https://github.com/exxoticx">
     <img src="https://avatars.githubusercontent.com/u/50809037?s=60" width="60" style="border-radius:50%;" alt="Sponsor"/>
   </a>
+  &nbsp;&nbsp;
+  <a href="https://github.com/projectdiscovery">
+    <img src="https://avatars.githubusercontent.com/u/50994705?s=60" width="60" style="border-radius:50%;" alt="Sponsor"/>
+  </a>
 </p>
 
 <p align="center">
@@ -126,5 +130,7 @@ If **rep+ saved you time** during testing, development, or bug bounty work, plea
     <img src="https://img.shields.io/badge/Become%20a%20Sponsor-%F0%9F%92%96-ea4aaa?style=for-the-badge" alt="Become a Sponsor"/>
   </a>
 </p>
+
+
 
 
