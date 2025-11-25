@@ -106,13 +106,21 @@ If **rep+ saved you time** during testing, development, or bug bounty work, plea
     <img src="https://avatars.githubusercontent.com/u/43368124?v=4" width="60" style="border-radius:50%;" alt="Maintainer"/>
   </a>
 
-  <p align="center">
-    <em>No sponsors yet — your profile will appear here when you support rep+ 💖</em><br><br>
-    <a href="https://github.com/sponsors/bscript">
-      <img src="https://img.shields.io/badge/Become%20a%20Sponsor-%F0%9F%92%96-ea4aaa?style=for-the-badge">
-    </a>
-  </p>
+  <br><br>
+  <strong>Sponsors</strong><br><br>
+
+  <a href="https://github.com/Snownin9">
+    <img src="https://avatars.githubusercontent.com/u/218675317" width="60" style="border-radius:50%;" alt="Sponsor"/>
+  </a>
+
+  <!-- Add more sponsors here following the same format -->
+
+  <br><br>
+  <a href="https://github.com/sponsors/bscript">
+    <img src="https://img.shields.io/badge/Become%20a%20Sponsor-%F0%9F%92%96-ea4aaa?style=for-the-badge">
+  </a>
 </p>
+
 
 
 
