@@ -2410,49 +2410,94 @@ pre {
     color: var(--text-color);
 }
 
-/* Light Theme Syntax Highlighting Adjustments */
+/* Light Theme Syntax Highlighting Adjustments - Improved contrast */
 .light-theme .http-method {
-    color: #882255;
+    color: #d73a49; /* Bright red - clear and readable */
+    font-weight: 600;
 }
 
 .light-theme .http-path {
-    color: #0044dd;
+    color: #005cc5; /* Strong blue - good contrast */
 }
 
 .light-theme .http-version {
-    color: #666;
+    color: #6a737d; /* Medium gray - readable */
 }
 
 .light-theme .http-header-name {
-    color: #0055aa;
+    color: #032f62; /* Dark blue - excellent contrast */
+    font-weight: 500;
 }
 
 .light-theme .http-colon {
-    color: #666;
+    color: #6a737d;
 }
 
 .light-theme .http-header-value {
-    color: #222;
+    color: #24292e; /* Very dark - maximum readability */
 }
 
 .light-theme .json-key {
-    color: #0055aa;
+    color: #005cc5; /* Blue - clear distinction */
+    font-weight: 500;
 }
 
 .light-theme .json-string {
-    color: #0044dd;
+    color: #032f62; /* Dark blue - readable on light */
 }
 
 .light-theme .json-number {
-    color: #aa5500;
+    color: #e36209; /* Orange - good contrast */
 }
 
 .light-theme .json-boolean {
-    color: #882255;
+    color: #d73a49; /* Red - clear */
 }
 
 .light-theme .json-null {
-    color: #666;
+    color: #6a737d; /* Gray - subtle */
+}
+
+.light-theme .param-key {
+    color: #005cc5;
+}
+
+.light-theme .param-value {
+    color: #032f62;
+}
+
+.light-theme .cookie-key {
+    color: #d73a49;
+}
+
+.light-theme .cookie-value {
+    color: #032f62;
+}
+
+/* Light theme request method badges - improved contrast */
+.light-theme .req-method.GET {
+    background: #d4e8da;
+    color: #0d5c1f;
+}
+
+.light-theme .req-method.POST {
+    background: #fff4d4;
+    color: #b06000;
+}
+
+.light-theme .req-method.PUT {
+    background: #d4def5;
+    color: #1552a8;
+}
+
+.light-theme .req-method.DELETE {
+    background: #f5d5d2;
+    color: #a01a16;
+}
+
+.light-theme .req-method.PATCH {
+    background: #e5d8f0;
+    color: #6a25a5;
 }
 
 .light-theme .diff-add {
@@ -3326,4 +3371,631 @@ pre {
     overflow: auto;
     height: 100%;
     white-space: pre;
+}
+
+/* Theme Selector */
+.theme-selector-wrapper {
+    position: relative;
+}
+
+.theme-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    background: var(--sidebar-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    min-width: 180px;
+    z-index: 1000;
+    display: none;
+    overflow: hidden;
+    padding: 4px 0;
+}
+
+.theme-menu.open {
+    display: block;
+}
+
+.theme-menu-item {
+    padding: 8px 16px;
+    cursor: pointer;
+    color: var(--text-color);
+    font-size: 13px;
+    transition: background-color 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.theme-menu-item:hover {
+    background: var(--hover-bg);
+}
+
+.theme-menu-item.active {
+    background: rgba(138, 180, 248, 0.15);
+    color: var(--accent-color);
+    font-weight: 500;
+}
+
+.theme-menu-item.active::after {
+    content: '✓';
+    margin-left: auto;
+    color: var(--accent-color);
+}
+
+/* Modern Dark Theme (VS Code Dark+ inspired) */
+.theme-modern-dark {
+    --bg-color: #1e1e1e;
+    --sidebar-bg: #252526;
+    --border-color: #3e3e42;
+    --text-color: #cccccc;
+    --accent-color: #4fc3f7;
+    --success-color: #89ddff;
+    --error-color: #f48771;
+    --input-bg: #1e1e1e;
+    --hover-bg: #2a2d2e;
+}
+
+/* Modern Light Theme (GitHub inspired) */
+.theme-modern-light {
+    --bg-color: #ffffff;
+    --sidebar-bg: #f6f8fa;
+    --border-color: #d1d9e0;
+    --text-color: #24292f;
+    --accent-color: #0969da;
+    --success-color: #1a7f37;
+    --error-color: #cf222e;
+    --input-bg: #ffffff;
+    --hover-bg: #f3f4f6;
+}
+
+/* Blue Theme */
+.theme-blue {
+    --bg-color: #0a1929;
+    --sidebar-bg: #132f4c;
+    --border-color: #1e4976;
+    --text-color: #b2d4ff;
+    --accent-color: #66b2ff;
+    --success-color: #4dd0e1;
+    --error-color: #ff6b9d;
+    --input-bg: #0d1b2a;
+    --hover-bg: #1a3a5c;
+}
+
+/* High Contrast Theme (Accessibility) */
+.theme-high-contrast {
+    --bg-color: #000000;
+    --sidebar-bg: #1a1a1a;
+    --border-color: #ffffff;
+    --text-color: #ffffff;
+    --accent-color: #00ffff;
+    --success-color: #00ff00;
+    --error-color: #ff0000;
+    --input-bg: #000000;
+    --hover-bg: #333333;
+}
+
+/* Terminal Theme (Green on Black) */
+.theme-terminal {
+    --bg-color: #0d1117;
+    --sidebar-bg: #161b22;
+    --border-color: #30363d;
+    --text-color: #c9d1d9;
+    --accent-color: #58a6ff;
+    --success-color: #3fb950;
+    --error-color: #f85149;
+    --input-bg: #0d1117;
+    --hover-bg: #21262d;
+}
+
+/* Theme-specific adjustments for Modern Dark */
+.theme-modern-dark .request-item.selected {
+    background-color: #2a2d2e;
+    border-left-color: var(--accent-color);
+}
+
+.theme-modern-dark .status-badge.status-2xx {
+    background: rgba(79, 195, 247, 0.2);
+    color: #4fc3f7;
+}
+
+.theme-modern-dark .status-badge.status-4xx,
+.theme-modern-dark .status-badge.status-5xx {
+    background: rgba(244, 135, 113, 0.2);
+    color: #f48771;
+}
+
+/* Theme-specific adjustments for Modern Light */
+.theme-modern-light .request-item.selected {
+    background-color: #e7f3ff;
+    border-left-color: var(--accent-color);
+}
+
+.theme-modern-light .status-badge.status-2xx {
+    background: #dafbe1;
+    color: #1a7f37;
+}
+
+.theme-modern-light .status-badge.status-4xx,
+.theme-modern-light .status-badge.status-5xx {
+    background: #ffebe9;
+    color: #cf222e;
+}
+
+/* Theme-specific adjustments for Blue */
+.theme-blue .request-item.selected {
+    background-color: rgba(102, 178, 255, 0.15);
+    border-left-color: var(--accent-color);
+}
+
+.theme-blue .status-badge.status-2xx {
+    background: rgba(77, 208, 225, 0.2);
+    color: #4dd0e1;
+}
+
+.theme-blue .status-badge.status-4xx,
+.theme-blue .status-badge.status-5xx {
+    background: rgba(255, 107, 157, 0.2);
+    color: #ff6b9d;
+}
+
+/* Theme-specific adjustments for High Contrast */
+.theme-high-contrast .request-item.selected {
+    background-color: #333333;
+    border-left: 3px solid var(--accent-color);
+}
+
+.theme-high-contrast .status-badge {
+    border: 2px solid currentColor;
+}
+
+/* Theme-specific adjustments for Terminal */
+.theme-terminal .request-item.selected {
+    background-color: #21262d;
+    border-left-color: var(--accent-color);
+}
+
+.theme-terminal .status-badge.status-2xx {
+    background: rgba(63, 185, 80, 0.2);
+    color: #3fb950;
+}
+
+.theme-terminal .status-badge.status-4xx,
+.theme-terminal .status-badge.status-5xx {
+    background: rgba(248, 81, 73, 0.2);
+    color: #f85149;
+}
+
+/* Syntax Highlighting for Modern Dark Theme */
+.theme-modern-dark .http-method {
+    color: #c586c0; /* Purple - VS Code style */
+    font-weight: 600;
+}
+
+.theme-modern-dark .http-path {
+    color: #4ec9b0; /* Cyan - clear */
+}
+
+.theme-modern-dark .http-version {
+    color: #808080;
+}
+
+.theme-modern-dark .http-header-name {
+    color: #569cd6; /* Blue */
+    font-weight: 500;
+}
+
+.theme-modern-dark .http-header-value {
+    color: #ce9178; /* Orange */
+}
+
+.theme-modern-dark .json-key {
+    color: #9cdcfe; /* Light blue */
+}
+
+.theme-modern-dark .json-string {
+    color: #ce9178; /* Orange */
+}
+
+.theme-modern-dark .json-number {
+    color: #b5cea8; /* Green */
+}
+
+.theme-modern-dark .json-boolean {
+    color: #569cd6; /* Blue */
+}
+
+.theme-modern-dark .json-null {
+    color: #808080;
+}
+
+.theme-modern-dark .param-key {
+    color: #9cdcfe;
+}
+
+.theme-modern-dark .param-value {
+    color: #ce9178;
+}
+
+.theme-modern-dark .cookie-key {
+    color: #c586c0;
+}
+
+.theme-modern-dark .cookie-value {
+    color: #ce9178;
+}
+
+/* Syntax Highlighting for Modern Light Theme */
+.theme-modern-light .http-method {
+    color: #cf222e; /* Bright red - GitHub style */
+    font-weight: 600;
+}
+
+.theme-modern-light .http-path {
+    color: #0969da; /* Blue */
+}
+
+.theme-modern-light .http-version {
+    color: #656d76;
+}
+
+.theme-modern-light .http-header-name {
+    color: #0550ae; /* Dark blue */
+    font-weight: 500;
+}
+
+.theme-modern-light .http-header-value {
+    color: #24292f; /* Very dark */
+}
+
+.theme-modern-light .json-key {
+    color: #0969da; /* Blue */
+}
+
+.theme-modern-light .json-string {
+    color: #0a3069; /* Dark blue */
+}
+
+.theme-modern-light .json-number {
+    color: #cf222e; /* Red */
+}
+
+.theme-modern-light .json-boolean {
+    color: #8250df; /* Purple */
+}
+
+.theme-modern-light .json-null {
+    color: #656d76;
+}
+
+.theme-modern-light .param-key {
+    color: #0969da;
+}
+
+.theme-modern-light .param-value {
+    color: #0a3069;
+}
+
+.theme-modern-light .cookie-key {
+    color: #cf222e;
+}
+
+.theme-modern-light .cookie-value {
+    color: #24292f;
+}
+
+/* Syntax Highlighting for Blue Theme */
+.theme-blue .http-method {
+    color: #ff79c6; /* Pink - good contrast on blue */
+    font-weight: 600;
+}
+
+.theme-blue .http-path {
+    color: #8be9fd; /* Cyan */
+}
+
+.theme-blue .http-version {
+    color: #6272a4;
+}
+
+.theme-blue .http-header-name {
+    color: #50fa7b; /* Green */
+    font-weight: 500;
+}
+
+.theme-blue .http-header-value {
+    color: #f1fa8c; /* Yellow */
+}
+
+.theme-blue .json-key {
+    color: #8be9fd; /* Cyan */
+}
+
+.theme-blue .json-string {
+    color: #f1fa8c; /* Yellow */
+}
+
+.theme-blue .json-number {
+    color: #bd93f9; /* Purple */
+}
+
+.theme-blue .json-boolean {
+    color: #ff79c6; /* Pink */
+}
+
+.theme-blue .json-null {
+    color: #6272a4;
+}
+
+.theme-blue .param-key {
+    color: #8be9fd;
+}
+
+.theme-blue .param-value {
+    color: #50fa7b;
+}
+
+.theme-blue .cookie-key {
+    color: #ff79c6;
+}
+
+.theme-blue .cookie-value {
+    color: #f1fa8c;
+}
+
+/* Syntax Highlighting for High Contrast Theme */
+.theme-high-contrast .http-method {
+    color: #ffff00; /* Bright yellow */
+    font-weight: 700;
+}
+
+.theme-high-contrast .http-path {
+    color: #00ffff; /* Cyan */
+}
+
+.theme-high-contrast .http-version {
+    color: #ffffff;
+}
+
+.theme-high-contrast .http-header-name {
+    color: #00ff00; /* Green */
+    font-weight: 600;
+}
+
+.theme-high-contrast .http-header-value {
+    color: #ffffff; /* White */
+}
+
+.theme-high-contrast .json-key {
+    color: #00ffff; /* Cyan */
+    font-weight: 600;
+}
+
+.theme-high-contrast .json-string {
+    color: #ffffff; /* White */
+}
+
+.theme-high-contrast .json-number {
+    color: #ffff00; /* Yellow */
+}
+
+.theme-high-contrast .json-boolean {
+    color: #00ff00; /* Green */
+}
+
+.theme-high-contrast .json-null {
+    color: #ffffff;
+}
+
+.theme-high-contrast .param-key {
+    color: #00ffff;
+}
+
+.theme-high-contrast .param-value {
+    color: #ffffff;
+}
+
+.theme-high-contrast .cookie-key {
+    color: #ffff00;
+}
+
+.theme-high-contrast .cookie-value {
+    color: #ffffff;
+}
+
+/* Syntax Highlighting for Terminal Theme */
+.theme-terminal .http-method {
+    color: #58a6ff; /* Blue */
+    font-weight: 600;
+}
+
+.theme-terminal .http-path {
+    color: #79c0ff; /* Light blue */
+}
+
+.theme-terminal .http-version {
+    color: #8b949e;
+}
+
+.theme-terminal .http-header-name {
+    color: #58a6ff; /* Blue */
+    font-weight: 500;
+}
+
+.theme-terminal .http-header-value {
+    color: #c9d1d9; /* Light gray */
+}
+
+.theme-terminal .json-key {
+    color: #79c0ff; /* Light blue */
+}
+
+.theme-terminal .json-string {
+    color: #a5d6ff; /* Very light blue */
+}
+
+.theme-terminal .json-number {
+    color: #3fb950; /* Green */
+}
+
+.theme-terminal .json-boolean {
+    color: #58a6ff; /* Blue */
+}
+
+.theme-terminal .json-null {
+    color: #8b949e;
+}
+
+.theme-terminal .param-key {
+    color: #79c0ff;
+}
+
+.theme-terminal .param-value {
+    color: #3fb950;
+}
+
+.theme-terminal .cookie-key {
+    color: #58a6ff;
+}
+
+.theme-terminal .cookie-value {
+    color: #c9d1d9;
+}
+
+/* Request Method Badges - Theme-specific overrides */
+
+/* Modern Dark Theme - Request Method Badges */
+.theme-modern-dark .req-method.GET {
+    background: rgba(79, 195, 247, 0.2);
+    color: #4fc3f7;
+}
+
+.theme-modern-dark .req-method.POST {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+}
+
+.theme-modern-dark .req-method.PUT {
+    background: rgba(156, 220, 254, 0.2);
+    color: #9cdcfe;
+}
+
+.theme-modern-dark .req-method.DELETE {
+    background: rgba(244, 135, 113, 0.2);
+    color: #f48771;
+}
+
+.theme-modern-dark .req-method.PATCH {
+    background: rgba(197, 134, 192, 0.2);
+    color: #c586c0;
+}
+
+/* Modern Light Theme - Request Method Badges */
+.theme-modern-light .req-method.GET {
+    background: #dafbe1;
+    color: #1a7f37;
+}
+
+.theme-modern-light .req-method.POST {
+    background: #fff8c5;
+    color: #9a6700;
+}
+
+.theme-modern-light .req-method.PUT {
+    background: #ddf4ff;
+    color: #0969da;
+}
+
+.theme-modern-light .req-method.DELETE {
+    background: #ffebe9;
+    color: #cf222e;
+}
+
+.theme-modern-light .req-method.PATCH {
+    background: #fbefff;
+    color: #8250df;
+}
+
+/* Blue Theme - Request Method Badges */
+.theme-blue .req-method.GET {
+    background: rgba(77, 208, 225, 0.2);
+    color: #4dd0e1;
+}
+
+.theme-blue .req-method.POST {
+    background: rgba(241, 250, 140, 0.2);
+    color: #f1fa8c;
+}
+
+.theme-blue .req-method.PUT {
+    background: rgba(139, 233, 253, 0.2);
+    color: #8be9fd;
+}
+
+.theme-blue .req-method.DELETE {
+    background: rgba(255, 121, 198, 0.2);
+    color: #ff79c6;
+}
+
+.theme-blue .req-method.PATCH {
+    background: rgba(189, 147, 249, 0.2);
+    color: #bd93f9;
+}
+
+/* High Contrast Theme - Request Method Badges */
+.theme-high-contrast .req-method.GET {
+    background: rgba(0, 255, 0, 0.2);
+    color: #00ff00;
+    border: 1px solid #00ff00;
+}
+
+.theme-high-contrast .req-method.POST {
+    background: rgba(255, 255, 0, 0.2);
+    color: #ffff00;
+    border: 1px solid #ffff00;
+}
+
+.theme-high-contrast .req-method.PUT {
+    background: rgba(0, 255, 255, 0.2);
+    color: #00ffff;
+    border: 1px solid #00ffff;
+}
+
+.theme-high-contrast .req-method.DELETE {
+    background: rgba(255, 0, 0, 0.2);
+    color: #ff0000;
+    border: 1px solid #ff0000;
+}
+
+.theme-high-contrast .req-method.PATCH {
+    background: rgba(255, 0, 255, 0.2);
+    color: #ff00ff;
+    border: 1px solid #ff00ff;
+}
+
+/* Terminal Theme - Request Method Badges */
+.theme-terminal .req-method.GET {
+    background: rgba(63, 185, 80, 0.2);
+    color: #3fb950;
+}
+
+.theme-terminal .req-method.POST {
+    background: rgba(187, 187, 187, 0.2);
+    color: #bbbbbb;
+}
+
+.theme-terminal .req-method.PUT {
+    background: rgba(88, 166, 255, 0.2);
+    color: #58a6ff;
+}
+
+.theme-terminal .req-method.DELETE {
+    background: rgba(248, 81, 73, 0.2);
+    color: #f85149;
+}
+
+.theme-terminal .req-method.PATCH {
+    background: rgba(163, 113, 247, 0.2);
+    color: #a371f7;
 }

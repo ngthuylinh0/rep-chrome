@@ -113,7 +113,22 @@ rep+ is a lightweight Chrome DevTools extension inspired by Burp Suite's Repeate
 - Export AI outputs as Markdown or PDF to save RPD/TPM.
 
 ### Productivity & Theming
-- Light/dark theme with smooth transitions.
+- **7 Beautiful Themes**: Choose from a variety of modern, carefully crafted themes:
+  - 🌙 **Dark (Default)**: Classic dark theme optimized for long sessions
+  - ☀️ **Light**: Clean light theme for bright environments
+  - 🎨 **Modern Dark**: VS Code Dark+ inspired theme with enhanced contrast
+  - ✨ **Modern Light**: GitHub-style light theme with crisp colors
+  - 💙 **Blue**: Cool blue/cyan color scheme for a fresh look
+  - 🔆 **High Contrast**: Accessibility-focused theme with maximum contrast
+  - 🖥️ **Terminal**: Green-on-black terminal aesthetic for retro vibes
+- **Theme Selector**: Easy dropdown menu to switch themes instantly
+- **Smooth Transitions**: Animated theme switching for a polished experience
+- **Optimized Syntax Highlighting**: All themes include carefully tuned colors for:
+  - HTTP methods, paths, headers, and versions
+  - JSON keys, strings, numbers, booleans, and null values
+  - Parameters and cookies
+  - Request method badges (GET, POST, PUT, DELETE, PATCH)
+- **Theme Persistence**: Your theme preference is saved and restored automatically
 - Request color tags and filters.
 - Syntax highlighting for JSON/XML/HTML.
 
