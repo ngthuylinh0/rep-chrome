@@ -558,12 +558,18 @@ function getOrCreatePort() {
         
         // Set up shared message listener
         sharedPort.onMessage.addListener((msg) => {
-            console.log('Port received message:', msg.type, msg.requestId);
-            if (msg.type && msg.requestId && portListeners.has(msg.requestId)) {
+            // Only handle local-model messages, ignore others (like captured_request)
+            if (!msg.type || !msg.type.startsWith('local-model')) {
+                return; // Silently ignore non-local-model messages
+            }
+            
+            console.log('Port received message:', msg.type, msg.requestId, 'Available listeners:', Array.from(portListeners.keys()));
+            if (msg.requestId && portListeners.has(msg.requestId)) {
                 const listener = portListeners.get(msg.requestId);
+                console.log('Calling listener for requestId:', msg.requestId);
                 listener(msg);
             } else {
-                console.warn('Port message ignored - no listener for requestId:', msg.requestId);
+                console.warn('Port message ignored - no listener for requestId:', msg.requestId, 'Available:', Array.from(portListeners.keys()));
             }
         });
         
@@ -865,6 +871,7 @@ export async function streamExplanationFromLocalWithSystem(apiUrl, model, system
 export async function streamChatFromLocalWithMessages(apiKey, model, messages, onUpdate) {
     return new Promise((resolve, reject) => {
         let fullText = '';
+        let buffer = ''; // Persistent buffer for accumulating incomplete JSON lines
         const requestId = `local-${Date.now()}-${Math.random()}`;
         let isResolved = false;
 
@@ -893,50 +900,155 @@ export async function streamChatFromLocalWithMessages(apiKey, model, messages, o
             return { role: msg.role, content: msg.content };
         });
 
+        // Set a timeout to detect if the request is stuck (60 seconds)
+        const timeout = setTimeout(() => {
+            if (!isResolved) {
+                console.warn('Local model chat request timeout after 60s, requestId:', requestId);
+            }
+        }, 60000);
+
         const portMessageListener = (msg) => {
             // Only process messages for this request
             if (!msg.type || msg.requestId !== requestId) return;
             
             if (msg.type === 'local-model-stream-chunk') {
-                fullText += msg.chunk;
-                onUpdate(fullText);
-            } else if (msg.type === 'local-model-stream-complete') {
+                // Accumulate chunks in persistent buffer
+                buffer += msg.chunk || '';
+                const lines = buffer.split('\n');
+                buffer = lines.pop() || ''; // Keep incomplete line in buffer
+                
+                for (const line of lines) {
+                    if (line.trim()) {
+                        try {
+                            const data = JSON.parse(line);
+                            
+                            // Ollama /api/generate format: { "response": "text", "done": false }
+                            // Ollama /api/chat format: { "message": { "role": "assistant", "content": "text" }, "done": false }
+                            let textChunk = null;
+                            
+                            if (data.response) {
+                                // /api/generate format
+                                textChunk = data.response;
+                            } else if (data.message && data.message.content) {
+                                // /api/chat format
+                                textChunk = data.message.content;
+                            }
+                            
+                            if (textChunk) {
+                                fullText += textChunk;
+                                onUpdate(fullText);
+                            }
+                            
+                            // If done, resolve immediately
+                            if (data.done) {
+                                if (!isResolved) {
+                                    isResolved = true;
+                                    clearTimeout(timeout);
+                                    portListeners.delete(requestId);
+                                    resolve(fullText);
+                                }
+                                return;
+                            }
+                        } catch (e) {
+                            // Ignore parse errors for incomplete chunks
+                        }
+                    }
+                }
+            } else if (msg.type === 'local-model-stream-done') {
+                // Process any remaining buffer
+                if (buffer.trim()) {
+                    try {
+                        const data = JSON.parse(buffer);
+                        // Handle both /api/generate and /api/chat formats
+                        let textChunk = null;
+                        if (data.response) {
+                            textChunk = data.response;
+                        } else if (data.message && data.message.content) {
+                            textChunk = data.message.content;
+                        }
+                        if (textChunk) {
+                            fullText += textChunk;
+                            onUpdate(fullText);
+                        }
+                    } catch (e) {
+                        // Ignore parse errors
+                    }
+                }
+                
+                // Background script sends 'local-model-stream-done' not 'local-model-stream-complete'
                 if (!isResolved) {
                     isResolved = true;
+                    clearTimeout(timeout);
                     portListeners.delete(requestId);
                     resolve(fullText);
                 }
             } else if (msg.type === 'local-model-stream-error' || msg.type === 'local-model-error') {
                 if (!isResolved) {
                     isResolved = true;
+                    clearTimeout(timeout);
                     portListeners.delete(requestId);
                     reject(new Error(msg.error || 'Failed to communicate with local model API'));
                 }
             }
         };
 
-        // Register listener for this request
-        portListeners.set(requestId, portMessageListener);
+        // Wrap the listener to clear timeout on completion (like explain function does)
+        const wrappedListener = (msg) => {
+            if (msg.type === 'local-model-stream-done' || msg.type === 'local-model-error' || msg.type === 'local-model-stream-error') {
+                clearTimeout(timeout);
+            }
+            portMessageListener(msg);
+        };
+        
+        // Register listener BEFORE sending message to avoid race condition
+        portListeners.set(requestId, wrappedListener);
+        console.log('Registered listener for requestId:', requestId, 'Total listeners:', portListeners.size);
 
         // Send request to background script
-        port.postMessage({
-            type: 'local-model-chat',
-            requestId: requestId,
-            apiUrl: apiKey, // apiKey is actually the API URL for local
-            body: {
-                model: model,
-                messages: formattedMessages,
-                stream: true
+        // Use 'url' instead of 'apiUrl' to match what background script expects
+        // For Ollama, if using messages array, we should use /api/chat endpoint instead of /api/generate
+        let apiUrl = apiKey; // apiKey is actually the API URL for local
+        if (apiUrl.includes('/api/generate') && formattedMessages.length > 0) {
+            // Replace /api/generate with /api/chat for messages-based requests
+            apiUrl = apiUrl.replace('/api/generate', '/api/chat');
+        } else if (!apiUrl.includes('/api/') && !apiUrl.includes('/api/chat')) {
+            // If no endpoint specified, default to /api/chat for messages
+            apiUrl = apiUrl.replace(/\/$/, '') + '/api/chat';
+        }
+        
+        try {
+            const message = {
+                type: 'local-model-chat',
+                requestId: requestId,
+                url: apiUrl,
+                body: {
+                    model: model,
+                    messages: formattedMessages,
+                    stream: true
+                }
+            };
+            
+            port.postMessage(message);
+            console.log('Sent local model chat request:', requestId, 'URL:', apiUrl, 'Model:', model, 'Messages:', formattedMessages.length);
+            console.log('Listener still registered after send:', portListeners.has(requestId));
+            
+            // Verify port is still connected after sending
+            if (chrome.runtime.lastError) {
+                clearTimeout(timeout);
+                if (!isResolved) {
+                    isResolved = true;
+                    portListeners.delete(requestId);
+                    reject(new Error('Port error after sending: ' + chrome.runtime.lastError.message));
+                }
             }
-        });
-
-        // Timeout after 60 seconds
-        setTimeout(() => {
+        } catch (e) {
+            clearTimeout(timeout);
             if (!isResolved) {
                 isResolved = true;
                 portListeners.delete(requestId);
-                reject(new Error('Request timeout'));
+                reject(new Error('Failed to send request to background script: ' + e.message));
             }
-        }, 60000);
+            return;
+        }
     });
 }
