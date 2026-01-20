@@ -70,7 +70,7 @@ rep+ is a lightweight Chrome DevTools extension inspired by Burp Suite's Repeate
   - **Copy as** full HTTP request in multiple languages: `curl`, PowerShell (`Invoke-WebRequest`), Python (`requests`), and JavaScript `fetch`.
 - Screenshot editor for request/response pairs: full-content capture, side‑by‑side or stacked layout, zoom, highlight and black-box redaction, resizable/movable annotations, keyboard delete, and undo/redo for all edits.
 
-### Bulk & Automation
+### Bulk & Automation.
 - Bulk replay with 4 attack modes: Sniper, Battering Ram, Pitchfork, Cluster Bomb.
 - Mark positions with `§`, configure payloads, pause/resume long runs.
 - Response diff view to spot changes between baseline and attempts.
